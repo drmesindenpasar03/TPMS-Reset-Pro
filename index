@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TPMS Reset Pro - Panduan & Prosedur Lengkap Semua Mobil</title>
+    <meta name="description" content="Aplikasi web panduan prosedur reset sensor TPMS (Tire Pressure Monitoring System) untuk semua merek mobil. Mendukung mode manual dan scanner OBD2.">
+    <meta name="keywords" content="TPMS, Reset TPMS, Sensor Ban, Mobil, Scanner OBD2, Otomotif, DrCarData">
+    
+    <!-- External Libraries -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        /* Custom Scrollbar for elegant look */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0a; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #262626; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #dc2626; 
+        }
+        
+        .glass-effect {
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.2);
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #ffffff, #dc2626, #991b1b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Futuristic Grid Background */
+        .bg-grid-pattern {
+            background-image: linear-gradient(to right, rgba(255,255,255,0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* Futuristic Card Style */
+        .futuristic-card {
+            background: linear-gradient(145deg, #111111, #050505);
+            border: 1px solid #262626;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body class="bg-neutral-950 text-neutral-200 font-sans min-h-screen flex flex-col bg-grid-pattern">
+
+    <!-- Navigation -->
+    <nav class="glass-effect sticky top-0 z-50 px-6 py-4 shadow-[0_4px_30px_rgba(220,38,38,0.1)]">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-4 cursor-pointer" onclick="switchTab('home')">
+                <div class="bg-red-600 p-2 rounded-lg shadow-[0_0_15px_rgba(220,38,38,0.6)]">
+                    <i data-lucide="gauge" class="text-white"></i>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-2xl font-black tracking-widest text-white uppercase leading-none">TPMS<span class="text-red-600">Master</span></h1>
+                    <span class="text-[10px] text-red-500 font-mono tracking-[0.2em] uppercase mt-1">Support by DrCarData</span>
+                </div>
+            </div>
+            <div class="flex gap-4 md:gap-6 items-center">
+                <button onclick="switchTab('home')" id="tab-home" class="text-white font-medium hover:text-red-400 transition-colors border-b-2 border-red-600 pb-1 text-sm md:text-base uppercase tracking-wider">Merek Mobil</button>
+                <button onclick="switchTab('scanner')" id="tab-scanner" class="text-neutral-500 font-medium hover:text-red-400 transition-colors border-b-2 border-transparent pb-1 text-sm md:text-base flex items-center gap-1 uppercase tracking-wider"><i data-lucide="cpu" class="w-4 h-4 hidden md:block"></i> Mode Scanner</button>
+                <button onclick="switchTab('tutorial')" id="tab-tutorial" class="text-neutral-500 font-medium hover:text-red-400 transition-colors border-b-2 border-transparent pb-1 text-sm md:text-base uppercase tracking-wider">Tutorial</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="flex-grow">
+        
+        <!-- Home / Brands View -->
+        <div id="view-home" class="block">
+            <!-- Hero Section -->
+            <section class="relative py-20 px-6 overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-red-900/10 via-neutral-950/50 to-neutral-950 pointer-events-none"></div>
+                <div class="max-w-4xl mx-auto text-center relative z-10">
+                    <h2 class="text-4xl md:text-5xl font-black text-white mb-6 leading-tight uppercase tracking-wide">
+                        Prosedur Reset Sensor TPMS <br> <span class="gradient-text">Semua Merek Mobil</span>
+                    </h2>
+                    <p class="text-lg text-neutral-400 mb-10 max-w-2xl mx-auto font-light">
+                        Cari merek mobil Anda untuk menemukan panduan langkah demi langkah cara melakukan reset indikator tekanan ban (TPMS) dengan presisi tingkat dealer.
+                    </p>
+                    
+                    <!-- Search Bar -->
+                    <div class="relative max-w-xl mx-auto">
+                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                            <i data-lucide="search" class="text-neutral-500 w-5 h-5"></i>
+                        </div>
+                        <input type="text" id="searchInput" placeholder="Cari merek (Cth: Toyota, Tesla, BMW...)" 
+                            class="w-full pl-12 pr-4 py-4 bg-black/80 border border-neutral-800 rounded-xl text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-transparent transition-all shadow-[0_0_20px_rgba(0,0,0,0.5)] text-lg font-mono tracking-wide">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Brands Grid -->
+            <section class="max-w-6xl mx-auto px-6 pb-20">
+                <div id="brandsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <!-- Cards will be generated by JS -->
+                </div>
+                <div id="noResults" class="hidden text-center py-10 text-neutral-600">
+                    <i data-lucide="alert-circle" class="w-12 h-12 mx-auto mb-4 opacity-50 text-red-600"></i>
+                    <p class="text-lg font-mono">DATA KENDARAAN TIDAK DITEMUKAN.</p>
+                </div>
+            </section>
+        </div>
+
+        <!-- Scanner / OBD2 Procedure View -->
+        <div id="view-scanner" class="hidden max-w-5xl mx-auto px-6 py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-widest">Prosedur Reset via Scanner OBD2</h2>
+                <p class="text-neutral-400 text-lg">Panduan standar teknisi profesional menggunakan alat Diagnostik dan TPMS Trigger Tool.</p>
+            </div>
+
+            <div class="futuristic-card rounded-2xl p-8 mb-8">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="bg-red-950/40 border border-red-900/50 p-3 rounded-lg text-red-500 shadow-[0_0_15px_rgba(220,38,38,0.2)]">
+                        <i data-lucide="cable" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-white tracking-wide">OBD-II RELEARN PROTOCOL</h3>
+                        <p class="text-neutral-400 font-mono text-sm mt-1">PENULISAN HEX ID SENSOR KE ECU</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mt-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-red-800 before:to-transparent">
+                    
+                    <!-- Step 1 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-600 bg-black text-white font-mono font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_10px_rgba(220,38,38,0.5)] z-10">01</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-black/60 p-5 rounded-xl border border-neutral-800 hover:border-red-600/50 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-2 uppercase">Persiapan Alat & Kendaraan</h4>
+                            <p class="text-sm text-neutral-400">Siapkan Scanner OBD2 dan alat TPMS Trigger (seperti Autel TS508, Launch, dsb). Pastikan tekanan angin keempat ban sudah sesuai standar pabrikan (lihat plakat pintu).</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-600 bg-black text-white font-mono font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_10px_rgba(220,38,38,0.5)] z-10">02</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-black/60 p-5 rounded-xl border border-neutral-800 hover:border-red-600/50 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-2 uppercase">Aktivasi Sensor Fisik</h4>
+                            <p class="text-sm text-neutral-400">Gunakan TPMS Trigger Tool pada masing-masing pentil ban. <strong class="text-red-400">Wajib dari ban Kiri Depan (FL) -> Kanan Depan (FR) -> Kanan Belakang (RR) -> Kiri Belakang (RL)</strong>. Pastikan semua ID sensor, tekanan, dan baterai terbaca oleh alat.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-600 bg-black text-white font-mono font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_10px_rgba(220,38,38,0.5)] z-10">03</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-black/60 p-5 rounded-xl border border-neutral-800 hover:border-red-600/50 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-2 uppercase">Koneksi OBD2 ke ECU</h4>
+                            <p class="text-sm text-neutral-400">Putar kunci kontak kendaraan ke posisi <strong class="text-red-400">ON</strong> (Mesin mati). Hubungkan kabel OBD2 dari Scanner/Trigger Tool ke port OBD2 di bawah dashboard kemudi.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-600 bg-black text-white font-mono font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_10px_rgba(220,38,38,0.5)] z-10">04</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-black/60 p-5 rounded-xl border border-neutral-800 hover:border-red-600/50 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-2 uppercase">Eksekusi OBD Relearn</h4>
+                            <p class="text-sm text-neutral-400">Pada layar alat Scanner, pilih opsi <strong class="text-red-400">'OBD Relearn'</strong> atau <strong class="text-red-400">'Write Sensor IDs to ECU'</strong>. Alat akan mengirimkan (menulis ulang) HEX ID sensor yang tadi dipindai langsung ke dalam modul kontrol mobil.</p>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
+                        <div class="flex items-center justify-center w-10 h-10 rounded-full border-2 border-red-600 bg-black text-white font-mono font-bold shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 shadow-[0_0_10px_rgba(220,38,38,0.5)] z-10">05</div>
+                        <div class="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-black/60 p-5 rounded-xl border border-neutral-800 hover:border-red-600/50 transition-colors">
+                            <h4 class="text-lg font-bold text-white mb-2 uppercase">Verifikasi & Clear DTC</h4>
+                            <p class="text-sm text-neutral-400">Setelah penulisan sukses (ditandai bunyi 'Bip'), matikan kontak ke OFF, cabut scanner, lalu nyalakan mesin. Lampu indikator TPMS kuning harus padam. Hapus histori DTC jika ada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-red-950/20 border border-red-600/30 rounded-xl p-6 text-red-200 flex gap-4">
+                <i data-lucide="siren" class="w-8 h-8 shrink-0 text-red-500"></i>
+                <div>
+                    <h5 class="font-bold text-white mb-1 uppercase tracking-wide">Peringatan Sistem:</h5>
+                    <p class="text-sm leading-relaxed text-neutral-300">Beberapa kendaraan (seperti Toyota, Honda, Nissan) dan pabrikan Korea yang menggunakan ID unik heksadesimal wajib menggunakan prosedur OBD2 Scanner ini jika ada penggantian modul sensor fisik baru. Fungsi Auto-Learn atau Tombol Reset di setir hanya berlaku untuk penyesuaian tekanan udara ulang.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tutorial View -->
+        <div id="view-tutorial" class="hidden max-w-5xl mx-auto px-6 py-12">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-black text-white mb-4 uppercase tracking-widest">Pengetahuan Dasar TPMS</h2>
+                <p class="text-neutral-400 text-lg">Dokumentasi teknis pemantau tekanan ban kendaraan modern.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8" id="tutorialsList">
+                <!-- Tutorials generated by JS -->
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-neutral-800 bg-black/80 py-8 text-center text-neutral-500">
+        <div class="flex justify-center items-center gap-2 mb-2">
+            <i data-lucide="database" class="w-4 h-4 text-red-600"></i>
+            <span class="font-mono text-xs tracking-widest uppercase text-red-500">Supported By DrCarData</span>
+        </div>
+        <p class="text-sm">© 2026 TPMS Master Pro. Sistem Referensi Profesional Otomotif.</p>
+    </footer>
+
+    <!-- Modal for Procedure Details -->
+    <div id="procedureModal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeModal()"></div>
+        
+        <!-- Modal Content -->
+        <div class="relative bg-neutral-900 border border-neutral-800 rounded-2xl w-full max-w-2xl max-h-[90vh] flex flex-col shadow-[0_0_40px_rgba(220,38,38,0.15)] transform transition-all scale-95 opacity-0" id="modalCard">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center p-6 border-b border-neutral-800">
+                <div class="flex items-center gap-4">
+                    <div class="bg-black border border-neutral-800 p-3 rounded-lg shadow-[0_0_10px_rgba(220,38,38,0.3)]" id="modalIconContainer">
+                        <i data-lucide="car-front" class="text-white w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-2xl font-black text-white uppercase tracking-wide" id="modalBrandTitle">Merek Mobil</h3>
+                        <p class="text-xs font-mono text-red-500 tracking-widest uppercase">Prosedur Kalibrasi</p>
+                    </div>
+                </div>
+                <button onclick="closeModal()" class="text-neutral-500 hover:text-white transition-colors bg-black hover:bg-red-600 p-2 rounded-full border border-neutral-800 hover:border-red-500">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+            </div>
+            
+            <!-- Modal Body -->
+            <div class="p-6 overflow-y-auto custom-scrollbar">
+                
+                <div class="bg-black border border-red-900/50 rounded-xl p-4 mb-6 flex gap-3 text-neutral-300">
+                    <i data-lucide="shield-alert" class="w-6 h-6 shrink-0 text-red-500"></i>
+                    <p class="text-sm font-mono leading-relaxed">System Check: Pastikan sebelum melakukan reset, semua ban telah diisi angin sesuai dengan tekanan standar pabrikan (lihat stiker di pilar pintu pengemudi).</p>
+                </div>
+
+                <h4 class="text-lg font-bold text-white mb-4 flex items-center gap-2 uppercase tracking-wider">
+                    <i data-lucide="terminal" class="w-5 h-5 text-red-600"></i> Sequence Langkah:
+                </h4>
+                
+                <ul class="space-y-4" id="modalStepsList">
+                    <!-- Steps injected by JS -->
+                </ul>
+                
+                <div id="modalNotes" class="mt-8 hidden">
+                    <h4 class="text-xs font-bold text-red-500 mb-2 uppercase tracking-widest border-l-2 border-red-600 pl-2">Catatan Tambahan:</h4>
+                    <p class="text-sm text-neutral-400 bg-black p-4 rounded-lg border border-neutral-800 font-mono leading-relaxed" id="modalNotesText"></p>
+                </div>
+            </div>
+            
+            <!-- Modal Footer -->
+            <div class="p-4 border-t border-neutral-800 bg-black/50 rounded-b-2xl flex justify-end">
+                <button onclick="closeModal()" class="px-8 py-3 bg-red-600 hover:bg-red-500 text-white font-bold tracking-widest uppercase rounded-lg transition-all shadow-[0_0_15px_rgba(220,38,38,0.4)] hover:shadow-[0_0_25px_rgba(220,38,38,0.6)] text-sm">
+                    Tutup Modul
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Base: Brands and TPMS Reset Procedures
+        const tpmsDatabase = [
+            { brand: "Toyota", icon: "car", steps: ["Pastikan kendaraan dalam posisi aman, rem parkir ditarik, dan tekanan keempat ban sudah sesuai standar.", "Putar kunci kontak ke posisi 'ON'.", "Cari tombol Reset TPMS di bawah setir kemudi.", "Tekan dan tahan tombol Reset TPMS tersebut hingga lampu indikator TPMS kuning di dashboard berkedip sebanyak 3 kali.", "Biarkan kunci kontak pada posisi ON selama beberapa menit.", "Matikan kunci kontak. Proses selesai."], notes: "Jika mobil Toyota dilengkapi head unit layar sentuh, opsi reset mungkin ada di menu 'Settings' -> 'Vehicle' -> 'Tire Pressure'." },
+            { brand: "Honda", icon: "car-front", steps: ["Nyalakan mesin kendaraan (Posisi P).", "Gunakan tombol panah di setir untuk menavigasi layar MID.", "Cari dan pilih menu 'Vehicle Settings'.", "Pilih opsi 'TPMS Calibration' lalu 'Calibrate'.", "Jalankan kendaraan pada kecepatan 30-100 km/jam selama kurang lebih 20 menit."] },
+            { brand: "BMW", icon: "shield", steps: ["Nyalakan mesin (Posisi P).", "Gunakan iDrive untuk mengakses menu.", "Buka 'My Vehicle' -> 'Vehicle Status'.", "Pilih ikon Ban (TPM/RPA) lalu klik 'Perform Reset' atau 'Yes'.", "Jalankan kendaraan, status akan menunjukkan 'Resetting...' hingga 100%."] },
+            { brand: "Mercedes-Benz", icon: "star", steps: ["Putar kontak ke posisi 2 (ON).", "Masuk ke menu 'Service' di layar MID.", "Pilih 'Tire Pressure' dan tekan 'OK'.", "Layar menanyakan: 'Use current pressures as new reference values?'.", "Tekan 'OK' atau '+' untuk 'Yes'. Pesan 'Restarted' muncul."] },
+            { brand: "Nissan", icon: "compass", steps: ["Isi tekanan angin ban.", "Putar kontak ke 'ON'.", "Akses 'Settings' -> 'Tire Pressures' -> 'Reset' via MID atau Head unit.", "Berkendara 25 km/jam minimal 10 menit."] },
+            { brand: "Mitsubishi", icon: "triangle", steps: ["Kendaraan dalam posisi ON.", "Tekan tombol 'INFO' untuk masuk pengaturan.", "Arahkan ke ikon TPMS.", "Tekan dan tahan tombol 'INFO' untuk inisialisasi.", "Bip berbunyi, reset selesai."] },
+            { brand: "Mazda", icon: "car", steps: ["Isi angin ban sesuai standar.", "Nyalakan mesin.", "Cari tombol 'SET' TPMS di kanan bawah dashboard.", "Tekan dan tahan tombol tersebut sampai indikator berkedip 2x dan bunyi bip.", "Selesai."] },
+            { brand: "Ford", icon: "circle-dot", steps: ["Putar kunci ON, tekan dan lepas rem.", "Matikan kontak OFF.", "Secara cepat: ON-OFF-ON-OFF-ON.", "Tekan lepas rem, lalu matikan OFF.", "Ulangi: ON-OFF-ON-OFF-ON. Klakson berbunyi.", "Gunakan TPMS Tool di ban Depan Kiri -> Depan Kanan -> Belakang Kanan -> Belakang Kiri hingga tiap ban bunyi klakson."] },
+            { brand: "Wuling", icon: "aperture", steps: ["Nyalakan ke posisi ACC/ON.", "Tekan 'Menu' di setir kiri.", "Pilih tampilan Tekanan Ban.", "Tekan dan tahan 'OK/Set' 3-5 detik.", "Pilih 'Yes/Konfirmasi' di layar."] },
+            { brand: "Hyundai", icon: "car-front", steps: ["Tekanan angin sesuai spesifikasi.", "Mesin ON (Posisi P).", "Tekan dan tahan tombol 'SET' TPMS di kiri pengemudi selama 3 detik.", "Indikator berkedip lalu padam. (Atau reset via Menu 'User Settings' di layar MID)."] },
+            { brand: "KIA", icon: "car-front", steps: ["Tekanan angin sesuai spesifikasi.", "Mesin ON (Posisi P).", "Masuk ke 'User Settings' di kemudi.", "Pilih 'Convenience' -> 'Tire Pressure' -> 'Save' atau tahan tombol 'SET' fisik 3 detik."] },
+            { brand: "Volkswagen", icon: "circle", steps: ["Kunci kontak ON.", "Buka sistem Infotainment (CAR menu).", "Pilih 'Vehicle Settings' -> 'Tires'.", "Pilih 'TPMS' dan klik 'Store tire pressure' atau 'Set'."] },
+            { brand: "Audi", icon: "circle", steps: ["Kunci kontak ON.", "Buka sistem MMI.", "Pilih 'Car' -> 'Service & Checks'.", "Pilih 'Tire Pressure Monitoring' dan tekan 'Store'."] },
+            { brand: "Chevrolet", icon: "shield-plus", steps: ["Kunci kontak ON.", "Gunakan DIC masuk ke info 'Tire Pressure'.", "Tahan tombol Set/Ctrl hingga klakson bunyi 2x (Relearn Mode).", "Buang/isi angin atau gunakan alat tiap ban (FL->FR->RR->RL) hingga klakson bunyi 1x."] },
+            { brand: "Jeep", icon: "mountain", steps: ["Sesuaikan tekanan 4 ban.", "Sebagian besar Auto-Learn: Kendarai di atas 25 km/jam selama 15 menit.", "Atau masuk menu 'Vehicle Info' -> 'Tire Pressure' di MID dan pilih Reset jika tersedia."] },
+            { brand: "Tesla", icon: "zap", steps: ["Isi angin ban sesuai pilar pintu.", "Auto-kalibrasi BLE: Jalankan mobil di atas 25 km/jam selama 10 menit.", "Reset manual: Menu 'Controls' -> 'Service' -> 'Wheel Configuration' / 'Reset TPMS Sensors'."] },
+            { brand: "Porsche", icon: "gauge", steps: ["Kunci kontak ON.", "Layar instrumen klaster, akses 'TPMS'.", "Masuk 'Settings', pilih 'Tire Type' & 'Load Type'.", "Kendarai mobil beberapa menit saat layar 'Learning'."] },
+            { brand: "Lexus", icon: "gem", steps: ["Kontak 'IG-ON'.", "Gunakan tombol MID di setir, masuk ikon roda gigi (Settings).", "Pilih 'Vehicle Settings' -> 'TPWS'.", "Pilih 'Set Pressure', tahan 'OK' hingga indikator berkedip 3 kali."] },
+            { brand: "Volvo", icon: "shield-check", steps: ["Nyalakan mesin.", "Layar tengah (Sensus/Google), buka aplikasi 'Car Status' atau 'Vehicle Settings'.", "Pilih 'TPMS' -> 'Store Pressure' / 'Calibrate'.", "Kendarai di atas 30 km/jam selama 15 menit."] },
+            { brand: "Suzuki", icon: "car", steps: ["Kontak ON.", "Tekan stik indikator di panel spidometer masuk menu MID.", "Putar stik ke 'TPMS', pilih mode.", "Pilih 'TPMS Kalibrasi' dan tahan stik hingga muncul 'Success'."] },
+            { brand: "Land Rover", icon: "compass", steps: ["Isi angin ban.", "Ignition ON.", "Tekan 'Menu' di setir -> 'Vehicle Info' -> 'Tyre Information'.", "Sistem mendeteksi tekanan secara Auto-Learn setelah berjalan 25 km/jam selama 15 menit. Setel 'Light/Heavy Load' jika ditanya."] },
+            { brand: "Peugeot", icon: "sun", steps: ["Mesin ON.", "Layar i-Cockpit tengah, masuk ke 'Vehicle Settings'.", "Pilih 'Under-inflation initialization'.", "Pilih 'Yes/Confirm'."] },
+            { brand: "Acura", icon: "car-front", steps: ["Isi ban sesuai tekanan spesifikasi.", "Nyalakan mesin (Parkir).", "Tekan tombol 'Settings' pada roda kemudi.", "Navigasi ke 'Vehicle Settings' -> 'TPMS Calibration'.", "Pilih 'Calibrate' dan jalankan mobil selama 20 menit (Sistem sama dengan Honda)."] },
+            { brand: "Infiniti", icon: "car", steps: ["Isi ban hingga tekanan standar.", "Sebagian model memiliki Auto-Learn (berkendara > 40 km/jam selama 10 menit).", "Jika melalui MID: Masuk ke 'Settings' -> 'Tire Pressure' -> tekan tombol 'Reset' atau tahan tombol 'Enter'.", "Gunakan OBD2 Scanner jika mengganti sensor ECU."] },
+            { brand: "Subaru", icon: "mountain", steps: ["Pastikan tekanan ban benar saat ban dingin.", "Subaru modern biasanya mendeteksi tekanan baru secara otomatis setelah berjalan.", "Jika mengganti sensor, alat Diagnostik OBD2 (Scanner) WAJIB digunakan untuk mendaftarkan HEX ID sensor baru ke ECU Subaru."] },
+            { brand: "Isuzu", icon: "car", steps: ["Pastikan tekanan ban tepat.", "Model MU-X dan D-Max: Masuk ke menu MID dashboard menggunakan tombol di kemudi.", "Pilih menu 'Settings' -> 'TPMS' -> pilih 'Reset'.", "Berkendaralah perlahan untuk memverifikasi bacaan sensor baru."] },
+            { brand: "Daihatsu", icon: "aperture", steps: ["Pastikan tekanan angin sesuai standar.", "Kunci kontak ON (mesin OFF).", "Tekan tombol Reset TPMS (Logo Ban) di area bawah kanan setir (dashboard bawah).", "Tahan hingga indikator TPMS kuning berkedip 3 kali. Matikan kontak."] },
+            { brand: "Datsun", icon: "car-front", steps: ["Isi ban sesuai spesifikasi stiker pilar.", "Putar kunci kontak ON.", "Datsun (GO/Cross) menggunakan sistem yang serupa dengan Nissan. Masuk ke pengaturan instrument cluster.", "Gunakan fitur reset tekanan, lalu berkendaralah untuk inisialisasi awal."] },
+            { brand: "Hino", icon: "car", steps: ["Truk ringan/menengah Hino yang dilengkapi TPMS: Periksa tekanan aktual.", "Proses reset dilakukan melalui layar instrumentasi (MID) truk.", "Masuk ke menu 'Maintenance' atau 'Tire', lalu tekan dan tahan tombol reset/set.", "Kalibrasi mendalam membutuhkan Hino-Bowie diagnostic tool."] },
+            { brand: "Genesis", icon: "gem", steps: ["Model mewah Hyundai: Sistem secara otomatis Auto-Learn setelah tekanan disesuaikan.", "Berkendara dengan kecepatan di atas 25 km/jam.", "Atau masuk ke menu Layar Utama -> 'Settings' -> 'Vehicle' -> 'Convenience' -> 'Tire Pressure Reset'."] },
+            { brand: "SsangYong (KG Mobility)", icon: "shield", steps: ["Nyalakan mesin.", "Gunakan tombol kontrol roda kemudi ke menu 'User Settings'.", "Arahkan ke 'Tire Pressure Monitor'.", "Pilih 'Reset' dan konfirmasi. Sistem akan merekam data setelah dijalankan."] },
+            { brand: "Daewoo", icon: "car", steps: ["Banyak berbasis teknologi GM lama.", "Gunakan pemindai TPMS (TPMS trigger tool).", "Ubah kendaraan ke mode belajar (Relearn Mode) melalui kombinasi tombol remote (Lock+Unlock ditahan) atau MID, lalu pindai tiap ban."] },
+            { brand: "Cadillac", icon: "shield", steps: ["Kontak ON (Mesin OFF).", "Dari layar MID, pilih 'Tire Pressure'.", "Tahan tombol ceklis/OK atau SEL hingga klakson bunyi 2x (Learn Mode).", "Gunakan alat aktivator TPMS mulai ban Kiri-Depan, Kanan-Depan, Kanan-Belakang, Kiri-Belakang. Selesai ditandai klakson 2x."] },
+            { brand: "Buick", icon: "shield-plus", steps: ["Metode persis sama dengan General Motors (GM/Cadillac/Chevrolet).", "Aktifkan Relearn Mode lewat layar Driver Information Center (DIC).", "Pindai sensor atau turunkan tekanan angin satu per satu (Kiri-Depan dulu) sampai klakson berbunyi."] },
+            { brand: "GMC", icon: "mountain", steps: ["Tekan tombol 'Vehicle Info' hingga muncul layar tekanan ban.", "Tahan tombol Set/Reset hingga terdengar klakson dua kali.", "Lakukan proses Relearn mulai dari ban depan kiri searah jarum jam menggunakan alat TPMS atau modulasi tekanan ban."] },
+            { brand: "Chrysler", icon: "car-front", steps: ["Sensor Chrysler menggunakan sistem Auto-Locate.", "Sesuaikan tekanan semua ban sesuai plakat.", "Berkendaralah pada kecepatan di atas 15 mph (24 km/jam) selama kurang lebih 20 menit.", "Sistem akan mendeteksi posisi dan tekanan ban baru secara otomatis."] },
+            { brand: "Dodge", icon: "car", steps: ["Metode Auto-Learn sama seperti lini Stellantis (FCA) lainnya.", "Setelah menambah angin atau rotasi ban, kemudikan kendaraan setidaknya selama 15 menit dengan kecepatan stabil.", "Indikator error otomatis terhapus saat modul TPM menerima sinyal."] },
+            { brand: "Ram", icon: "mountain", steps: ["Isi ban truk Ram sesuai standar muatan (Light/Heavy).", "Masuk ke menu 'Vehicle Info' di instrumen klaster untuk memilih kategori muatan ban jika diperlukan.", "Kendarai truk dengan kecepatan konstan di atas 25 km/jam untuk trigger proses Auto-Learn."] },
+            { brand: "Lincoln", icon: "star", steps: ["Gunakan sistem GM/Ford: ON-OFF kontak 3x, rem 1x, ON-OFF 3x.", "Tunggu klakson berbunyi yang menandakan Train Mode.", "Gunakan alat pengaktif TPMS dari Kiri Depan hingga Kiri Belakang. Klakson akan berbunyi di setiap ban."] },
+            { brand: "Hummer", icon: "shield", steps: ["Untuk Hummer EV terbaru: Sistem TPMS terhubung dengan antarmuka sentuh.", "Buka menu 'Controls' -> 'Vehicle Settings' -> 'Tire Pressure'.", "Pilih 'Learn Sensors' atau sesuaikan tekanan dan jalankan mobil."] },
+            { brand: "Pontiac", icon: "car", steps: ["Gunakan fob kunci (Remote): Tahan tombol Lock dan Unlock bersamaan hingga klakson bunyi 2x.", "Lepaskan angin / gunakan alat TPMS pada ban FL, FR, RR, RL secara berurutan hingga klakson memverifikasi setiap roda."] },
+            { brand: "Saturn", icon: "circle", steps: ["Tekan tombol Info di dashboard untuk mencari 'Tire Pressure'.", "Tekan tombol Reset hingga layar menampilkan 'Tire Learning Active'.", "Ubah tekanan ban / gunakan alat aktivator searah jarum jam dimulai dari Depan-Kiri."] },
+            { brand: "Rivian", icon: "zap", steps: ["Rivian R1T/R1S menggunakan deteksi otomatis BLE/RF.", "Cukup pastikan ban diisi dengan tekanan standar kompresor.", "Berkendaralah beberapa mil. Sistem UI layar tengah akan mengkalibrasi pembacaan roda secara langsung."] },
+            { brand: "Lucid", icon: "zap", steps: ["Dari kokpit layar tengah Glass Cockpit, buka 'Vehicle Settings'.", "Navigasi ke menu 'Service' atau 'Tires'.", "Pilih 'Reset TPMS' setelah rotasi ban atau isi angin. Kendarai mobil selama 5-10 menit."] },
+            { brand: "Fisker", icon: "zap", steps: ["Model Ocean: Gunakan layar sentuh tengah.", "Masuk ke 'Vehicle Settings' -> 'Tires'.", "Tentukan ukuran roda jika diganti, lalu pilih 'Calibrate'.", "Berkendara secara normal hingga nilai tekanan baru muncul."] },
+            { brand: "Smart", icon: "circle", steps: ["Putar kontak ke posisi ON.", "Gunakan tombol di instrumen klaster untuk mencari ikon TPMS.", "Tahan tombol reset/OK di dasbor (atau tuas wiper) hingga indikator berkedip lambat.", "Jalankan kendaraan beberapa saat."] },
+            { brand: "Maybach", icon: "star", steps: ["Sama dengan prosedur Mercedes-Benz S-Class.", "Buka menu 'Service' di roda kemudi.", "Arahkan ke 'Tire Pressure' dan konfirmasikan pengaturan tekanan ban saat ini sebagai nilai dasar ('Use current pressures as new reference')."] },
+            { brand: "Mini", icon: "circle", steps: ["Nyalakan mesin (Posisi diam).", "Akses sistem iDrive Mini atau sistem layar tengah.", "Pilih 'Vehicle Info' -> 'Vehicle Status' -> 'Perform Reset'.", "Mulai mengemudi. Proses reset berjalan dalam persentase di layar."] },
+            { brand: "Alpina", icon: "shield-check", steps: ["Sistem iDrive persis seperti BMW M/Seri kelas atas.", "Masuk menu 'My Vehicle' -> 'Vehicle Status' -> 'Tire Pressure Monitor'.", "Tekan 'Perform Reset'. Sistem membutuhkan kendaraan berjalan untuk merekam putaran."] },
+            { brand: "Jaguar", icon: "car", steps: ["Sebagian besar Jaguar mendeteksi sensor via sistem Auto-Learn.", "Pastikan tekanan ban tepat. Untuk mengatur beban (Normal/Heavy), masuk ke 'Vehicle Information' di MID kemudi.", "Pilih 'Tyre Information' -> 'Tyre Load' dan atur. Kendarai mobil 15 menit."] },
+            { brand: "Aston Martin", icon: "star", steps: ["Isi angin keempat ban.", "Nyalakan mesin. Navigasi ke menu layar instrument cluster menggunakan tombol roda kemudi.", "Arahkan ke layar 'Tire Pressure'. Tekan dan tahan tombol OK/Enter untuk memulai kalibrasi, lalu jalankan mobil."] },
+            { brand: "Bentley", icon: "gem", steps: ["Nyalakan mesin. Buka layar utama Infotainment.", "Pilih menu 'Car' atau 'Vehicle Settings'.", "Masuk ke 'TPMS' atau 'Tire Pressure Monitoring'.", "Tekan 'Store' untuk merekam tekanan saat ini, lalu jalankan kendaraan."] },
+            { brand: "Rolls-Royce", icon: "star", steps: ["Rolls-Royce berbagi sistem arsitektur iDrive BMW.", "Masuk menu melalui pengontrol pusat: 'Vehicle Settings' -> 'Vehicle Status' -> 'Tire Pressure'.", "Lakukan inisialisasi reset, kemudian jalankan mobil hingga status selesai."] },
+            { brand: "McLaren", icon: "car-front", steps: ["Akses layar IRIS/Track UI sentral.", "Buka menu 'Vehicle' -> 'Tire Settings'.", "Pastikan tekanan ban sesuai spesifikasi (Track atau Road).", "Pilih 'Relearn Sensors' dan mengemudi dengan kecepatan stabil di atas 30 km/jam."] },
+            { brand: "Lotus", icon: "gauge", steps: ["Untuk Lotus (Emira/Eletre):", "Buka menu pengaturan kendaraan di layar sentuh atau MID.", "Pilih opsi 'Tyres' dan klik 'Calibrate/Reset TPMS'.", "Dibutuhkan berkendara sejauh beberapa mil untuk membaca ID sensor baru."] },
+            { brand: "Ferrari", icon: "shield", steps: ["Kunci kontak ON (Mesin menyala).", "Pada layar TFT sebelah kiri instrumen, gunakan tombol kontrol di area dashboard/setir.", "Akses 'Menu' -> 'Tire Pressure Calibration' atau 'TPMS Reset'.", "Konfirmasi kalibrasi dan mengemudi."] },
+            { brand: "Maserati", icon: "car-front", steps: ["Maserati Ghibli/Levante menggunakan sistem FCA/Stellantis Auto-Learn.", "Isi tekanan sesuai dengan label di pintu pengemudi.", "Kendarai kendaraan dengan kecepatan > 25 km/jam selama minimal 20 menit. Sistem mereset otomatis."] },
+            { brand: "Lamborghini", icon: "shield-check", steps: ["Sistem basis Audi/VAG Group.", "Nyalakan sistem infotainment HMI utama.", "Akses 'Car' -> 'Setup' -> 'Tyres'.", "Klik opsi 'Store Tyre Pressure'. Konfirmasi OK."] },
+            { brand: "Alfa Romeo", icon: "triangle", steps: ["Untuk Giulia/Stelvio: Tekanan disesuaikan terlebih dahulu.", "Gunakan kontrol kenop putar ke menu layar tengah.", "Pilih 'Settings' -> 'Driver Assistance' atau 'Car' -> 'TPMS'.", "Sebagian besar reset terjadi secara otomatis (Auto-learn) dengan berkendara cepat."] },
+            { brand: "Fiat", icon: "car", steps: ["Masuk menu 'Settings' pada layar instrumen menggunakan panah setir.", "Gulir ke 'Vehicle Info' -> 'Tire Pressure'.", "Jika opsi reset tersedia, tekan 'OK'. Jika tidak, Fiat biasanya menggunakan sistem Auto-learn (berkendara selama 15 menit)."] },
+            { brand: "Lancia", icon: "car-front", steps: ["Berbagi sistem Stellantis.", "Pastikan ban diisi dengan tekanan standar.", "Reset otomatis melalui pengemudian kendaraan 20 km/jam selama 15-20 menit."] },
+            { brand: "Pagani", icon: "star", steps: ["Hypercar dengan diagnostik khusus.", "Pengaturan TPMS umumnya dapat diakses via panel instrumen digital utama -> 'Vehicle Status'.", "Bila mengganti velg/ban khusus (Pirelli Trofeo), biasanya teknisi Pagani mereset melalui perangkat diagnosis OBD spesifik."] },
+            { brand: "Citroen", icon: "circle", steps: ["Nyalakan sistem kendaraan.", "Melalui layar sentuh utama, ketuk ikon 'Kendaraan' (Vehicle/Driving).", "Pilih 'Under-inflation initialization'.", "Tekan 'Yes' untuk menyimpan nilai tekanan yang baru."] },
+            { brand: "Renault", icon: "car", steps: ["Kontak ON.", "Tekan tombol panah atas/bawah pada tuas wiper kanan untuk mengakses layar MID 'Tyre Pressure'.", "Tekan dan tahan tombol OK pada tuas tersebut selama kurang lebih 3 detik hingga indikator berkedip. Mulai jalan."] },
+            { brand: "Bugatti", icon: "circle", steps: ["Sistem telemetri khusus grup VAG/VW-Porche-Audi.", "Pengaturan TPMS untuk mode jalan bebas/Topspeed divalidasi langsung di MID pusat layar.", "Pilih 'Tire Setup' lalu 'Store'. (Catatan: Penggantian sensor khusus butuh scanner VW/Audi VAS diagnostic)."] },
+            { brand: "Alpine", icon: "triangle", steps: ["Model Alpine A110 (berbasis arsitektur Renault).", "Gulir menu pada setir atau dashboard ke menu 'Tyre Pressure'.", "Tahan tombol Setel ulang hingga sistem merekam tekanan baru, lalu berkendaralah sejauh beberapa kilometer."] },
+            { brand: "DS Automobiles", icon: "gem", steps: ["Masuk ke menu layar i-Cockpit tengah.", "Pilih tab 'Driving' atau ikon mobil.", "Ketuk 'Tyre under-inflation initialization' dan pilih 'Confirm'. (Sama dengan teknologi Peugeot/Citroen)."] },
+            { brand: "Skoda", icon: "car", steps: ["Kunci kontak ON.", "Di layar Infotainment, tekan tombol 'CAR'.", "Buka menu 'Setup' -> 'Tyres'.", "Klik tombol 'Set' atau 'Store tyre pressure' dan konfirmasikan 'OK'."] },
+            { brand: "SEAT", icon: "car", steps: ["Sistem identik dengan VW/Skoda.", "Masuk ke Infotainment sentral, pilih 'Vehicle Settings' -> 'Tyres'.", "Ketuk 'SET' pada bagian Tyre Pressure Loss Indicator. Konfirmasi penyimpanan data."] },
+            { brand: "Cupra", icon: "triangle", steps: ["Sistem MIB3 terbaru.", "Layar sentuh -> Pilih 'Vehicle' -> 'Settings' -> 'Tires'.", "Ketuk panah 'Tire Pressure Warning System' dan tekan 'Set/Store'.", "Sistem mereset data referensi ban secara instan."] },
+            { brand: "Dacia", icon: "shield", steps: ["Sistem berbasis Renault.", "Nyalakan mesin. Gunakan tombol di kemudi/tuas wiper ke layar 'Set tp' atau 'Tyre Pressure'.", "Tahan tombol OK di kemudi selama 3 detik. Layar akan berkedip dan sistem terre-set."] },
+            { brand: "Saab", icon: "shield", steps: ["(Model lama/GM platform).", "Gunakan tombol CLR atau Info di dashboard.", "Tekan dan tahan pada layar TPMS. Pada model GM-era, lakukan relearn dengan klakson 2x lalu kurangi angin setiap ban."] },
+            { brand: "Polestar", icon: "zap", steps: ["Buka menu Android Automotive OS di layar tengah.", "Buka aplikasi 'Car Status'.", "Pilih 'TPMS' -> ketuk tombol 'Store Pressure'.", "Kalibrasi diselesaikan saat mobil dikendarai perlahan."] },
+            { brand: "Koenigsegg", icon: "star", steps: ["Supercar spesifik. Kalibrasi biasanya tertanam di menu SmartCenter (layar sentuh).", "Pilih 'Vehicle' -> 'Tire Settings'.", "Konfirmasi inisiasi setelah sensor mendeteksi ban terpasang. Butuh OBD Scanner untuk penggantian ID sensor murni."] },
+            { brand: "Lada", icon: "car-front", steps: ["Model Vesta modern memiliki TPMS Indirect.", "Pastikan ban diisi dengan tekanan tepat.", "Masuk menu instrumen klaster, cari simbol ban, lalu tahan tombol 'OK' pada roda kemudi hingga indikator padam."] },
+            { brand: "BYD", icon: "zap", steps: ["Mobil Listrik Build Your Dreams.", "Akses layar sentuh berputar di tengah.", "Buka menu 'Vehicle Settings' (Ikon Mobil) -> 'DiLink/Smart System' -> 'Vehicle Health/TPMS'.", "Pilih 'Reset' atau 'Calibrate Tire Pressure'."] },
+            { brand: "Chery", icon: "car", steps: ["Nyalakan mobil (Tiggo series, dll).", "Gunakan kontrol di roda kemudi masuk ke menu instrumen cluster digital.", "Pilih pengaturan 'Vehicle' -> 'TPMS Reset' atau 'Tire pressure calibration'. Tekan tombol 'OK' untuk eksekusi."] },
+            { brand: "MG", icon: "shield-plus", steps: ["Mobil menyala. Gunakan layar sentuh (Head unit).", "Pilih menu 'Vehicle Settings' (Pengaturan Kendaraan).", "Buka tab 'Safety' atau 'Keselamatan'.", "Pilih 'TPMS Reset' dan konfirmasi."] },
+            { brand: "Haval", icon: "car-front", steps: ["Nyalakan head unit.", "Buka 'System Settings' -> 'Vehicle Settings' -> 'Driving Safety'.", "Pilih 'TPMS Calibration' dan konfirmasi 'OK'.", "Lampu kuning di speedometer akan berkedip lalu mati."] },
+            { brand: "Geely", icon: "car", steps: ["Akses layar infotainment utama.", "Buka menu 'Car Settings'.", "Pilih tab 'Keselamatan/Safety' -> 'Sistem Pemantauan Tekanan Ban (TPMS)'.", "Tekan tombol kalibrasi ulang/reset."] },
+            { brand: "Changan", icon: "circle", steps: ["Dari menu layar instrumen MID, gunakan kontrol stir.", "Pilih menu 'Vehicle settings'.", "Arahkan ke pengaturan Tekanan Ban. Tekan tahan 'OK' pada sistem kemudi."] },
+            { brand: "DFSK", icon: "car-front", steps: ["Nyalakan kendaraan seri Glory/Gelora.", "Tekan tombol pengaturan atau panah di kemudi.", "Navigasi layar MID ke 'Tire pressure'.", "Tekan lama tombol 'OK' atau 'Reset' sampai data berkedip dan terekam ulang."] },
+            { brand: "Neta", icon: "zap", steps: ["Masuk menu utama layar sentuh sentral EV.", "Pilih ikon 'Kendaraan/Vehicle Settings'.", "Masuk ke 'Driver Assist' atau 'Safety'.", "Pilih 'Reset TPMS' (Inisialisasi Tekanan Ban)."] },
+            { brand: "Omoda", icon: "car", steps: ["Merek sub-brand Chery. Prosedur identik.", "Melalui Layar Head Unit Sentral: Buka menu Pengaturan Mobil.", "Pilih 'Safety/ADAS' -> 'Tire Pressure Reset'.", "Konfirmasikan 'Ya/Yes' saat ditanya apakah tekanan sudah benar."] },
+            { brand: "GWM", icon: "shield-check", steps: ["Great Wall Motors (Ora/Tank). Buka headunit tengah.", "Buka 'Vehicle Settings' -> 'Safety/Keselamatan'.", "Buka 'TPMS/Pemantau Ban'. Tekan tombol inisialisasi / Reset.", "Sistem menyimpan data setelah mobil dijalankan."] },
+            { brand: "Xpeng", icon: "zap", steps: ["Kendaraan EV pintar. Dari OS layar tengah:", "Menu 'Car Settings' -> 'Vehicle Condition' -> 'Tire Pressure'.", "Tekan 'Reset/Calibrate'.", "Proses menggunakan pembacaan putaran ban virtual."] },
+            { brand: "NIO", icon: "zap", steps: ["Gunakan asisten suara (NOMI) dengan berkata 'Reset TPMS' ATAU:", "Buka tab 'My Car' di layar tengah -> 'Tires'.", "Pilih 'Calibrate' setelah mengisi angin. Tunggu status kalibrasi beres di latar belakang."] },
+            { brand: "Li Auto", icon: "zap", steps: ["Lixiang (Li Auto) PHEV/EV. Buka layar kontrol pusat.", "Pilih ikon 'Pengaturan/Settings' -> 'Kendaraan/Vehicle'.", "Pilih 'TPMS Calibrate'.", "Setelah konfirmasi, layar meminta pengemudi berkendara perlahan selama 1 km."] },
+            { brand: "Zeekr", icon: "zap", steps: ["Sistem Geely EV Premium.", "Akses Zeekr OS layar tengah.", "Masuk menu 'Car Settings' -> 'Safety'.", "Pilih tab 'Tire Pressure' lalu tekan 'Calibrate'.", "Sensor akan membaca mandiri dalam waktu 5-10 menit berkendara."] },
+            { brand: "BAIC", icon: "car", steps: ["Putar kontak ke ON.", "Melalui kemudi, akses MID. Arahkan ke menu 'Setting' -> 'TPMS'.", "Tahan tombol Set/OK pada roda kemudi hingga peringatan di-reset."] },
+            { brand: "FAW", icon: "car", steps: ["Buka pengaturan melalui layar tengah/MID instrumen.", "Pilih 'Tire Pressure Warning' reset. Tekan tombol inisialisasi yang tertera di menu.", "Kendarai kendaraan untuk konfirmasi ulang sensor ECU."] },
+            { brand: "Dongfeng", icon: "car", steps: ["Sebagian besar menggunakan MID instrument klaster.", "Gunakan tuas/tombol setir ke menu 'Tire Pressure'.", "Tahan tombol OK selama 3-5 detik hingga muncul notifikasi sukses di layar."] },
+            { brand: "Hongqi", icon: "star", steps: ["Mobil mewah China. Buka sistem layar sentuh.", "Pilih 'Vehicle Settings' -> 'Keselamatan (Safety)'.", "Cari submenu TPMS / Kalibrasi Ban. Ketuk tombol reset dan konfirmasi tekanan sudah dicek manual."] },
+            { brand: "Maxus", icon: "car-front", steps: ["Pastikan tekanan ban akurat.", "Gunakan panah di kemudi, masuk ke layar informasi tekanan ban di spidometer.", "Tekan dan tahan tombol konfirmasi (OK) di setir sampai nilai me-reset diri."] },
+            { brand: "Roewe", icon: "car-front", steps: ["Brand SAIC (Sama seperti MG).", "Masuk ke head unit -> 'Vehicle' -> 'Safety'.", "Klik 'Tire Pressure Monitoring System' -> 'Calibration'.", "Proses kalibrasi bekerja via sensor ABS Indirect."] },
+            { brand: "Tank", icon: "mountain", steps: ["Lini GWM spesialis Offroad. Buka menu Infotainment.", "Pilih 'Vehicle Settings' -> 'Offroad/Safety Setup' -> 'TPMS'.", "Tekan tombol 'Set' untuk kalibrasi ulang sesuai tekanan medan (batu/pasir/aspal)."] },
+            { brand: "Tata", icon: "car", steps: ["Nyalakan kendaraan.", "Gunakan panel instrumen dan tombol info kemudi untuk masuk ke menu Setup.", "Cari opsi 'Tyre Pressure'. Jika model didukung layar sentuh iRA, reset via menu headunit 'Settings' -> 'TPMS'."] },
+            { brand: "Mahindra", icon: "mountain", steps: ["Buka sistem AdrenoX (Head unit) pada model seperti XUV700.", "Masuk ke 'Vehicle Info' -> 'TPMS'.", "Sistem mendeteksi ID secara otomatis (Auto-learn) bila berjalan > 30 km/jam selama 10 menit, atau klik 'Calibrate' dari layar."] },
+            { brand: "Proton", icon: "car", steps: ["Model terbaru seperti X50/X70/X90 (Berbasis Geely).", "Buka head unit layar utama.", "Masuk menu 'Vehicle Settings' -> 'Safety' -> 'TPMS'.", "Pilih 'Kalibrasi' lalu jalankan mobil secara normal."] },
+            { brand: "Perodua", icon: "car", steps: ["Mirip dengan Daihatsu. Model Ativa/Aruz:", "Tekan tombol fisik reset TPMS (logo ban) di sebelah kanan dashboard bawah (atau di menu MID panel meter).", "Tahan tombol sampai lampu peringatan kuning di panel berkedip 3 kali."] },
+            { brand: "Holden", icon: "shield-plus", steps: ["Model berbasis platform GM (Commodore, Colorado).", "Nyalakan kontak ON.", "Arahkan Driver Info Center ke menu Tyre Pressure.", "Tahan tombol tick (✓) sampai klakson berbunyi 2x. Pindai tiap ban mulai Kiri-Depan hingga selesai."] },
+            { brand: "VinFast", icon: "zap", steps: ["Kendaraan listrik Vietnam (VF8, VF9).", "Di layar sentuh sentral berukuran besar, buka tab 'Vehicle'.", "Pilih menu 'Service' -> 'Tire Pressure'.", "Ketuk 'Calibrate' dan konfirmasikan ukuran roda. Jalankan kendaraan secara konstan."] }
+        ];
+
+        // Tutorial Database
+        const tutorialDatabase = [
+            {
+                title: "Apa Itu Sensor TPMS?",
+                icon: "help-circle",
+                content: "TPMS (Tire Pressure Monitoring System) adalah fitur keselamatan canggih berupa sistem elektronik yang dirancang untuk memantau tekanan udara dalam ban pneumatik secara real-time. Sistem ini akan mengirimkan peringatan kepada pengemudi (biasanya berupa lampu kuning berbentuk penampang ban dengan tanda seru) ketika mendeteksi tekanan ban yang kurang secara signifikan (biasanya drop di bawah 25% dari standar)."
+            },
+            {
+                title: "Kapan TPMS Harus Direset?",
+                icon: "clock",
+                content: "Anda diwajibkan melakukan reset / kalibrasi sistem TPMS pada situasi berikut:<br><br><ul class='list-disc pl-5 space-y-1 mt-2 text-slate-300'><li>Setelah menambah atau mengurangi tekanan angin ban.</li><li>Setelah menambal ban yang bocor.</li><li>Setelah mengganti ban baru atau velg baru.</li><li>Setelah melakukan rotasi ban berkala.</li></ul><br>Tanpa melakukan reset, sistem akan terus menggunakan data lama dan memberikan peringatan yang salah."
+            },
+            {
+                title: "Direct TPMS vs Indirect TPMS",
+                icon: "settings",
+                content: "<strong class='text-white'>Direct TPMS:</strong> Menggunakan sensor fisik yang menempel pada pentil di dalam ban. Sensor ini mengirimkan data tekanan udara dan suhu spesifik ke komputer mobil secara nirkabel (radio). Keunggulannya sangat akurat.<br><br><strong class='text-white'>Indirect TPMS:</strong> Tidak menggunakan sensor di dalam ban. Sistem ini bergantung pada sensor kecepatan roda (dari sistem ABS). Ban yang kurang angin akan memiliki diameter lebih kecil sehingga berputar lebih cepat dari ban lain. Komputer mendeteksi perbedaan putaran ini sebagai ban kempes."
+            },
+            {
+                title: "Bahaya Mengabaikan Lampu TPMS",
+                icon: "alert-triangle",
+                content: "Mengabaikan lampu TPMS yang menyala dapat berakibat fatal:<br><br><ol class='list-decimal pl-5 space-y-1 mt-2 text-slate-300'><li><strong>Risiko Kecelakaan:</strong> Ban kurang angin sangat rentan meledak pada kecepatan tinggi karena panas berlebih (overheat).</li><li><strong>Boros BBM:</strong> Ban kempes meningkatkan resistensi gulir, memaksa mesin bekerja lebih keras.</li><li><strong>Keausan Ban Tidak Merata:</strong> Tepi luar ban akan lebih cepat habis, memperpendek usia pakai ban.</li><li><strong>Handling Buruk:</strong> Respons setir menjadi lambat dan jarak pengereman bertambah.</li></ol>"
+            }
+        ];
+
+        // Initialize Icons
+        lucide.createIcons();
+
+        // Render Brands
+        const brandsGrid = document.getElementById('brandsGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+
+        function renderBrands(filter = "") {
+            brandsGrid.innerHTML = '';
+            
+            const filteredBrands = tpmsDatabase.filter(item => 
+                item.brand.toLowerCase().includes(filter.toLowerCase())
+            );
+
+            if (filteredBrands.length === 0) {
+                brandsGrid.classList.add('hidden');
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                brandsGrid.classList.remove('hidden');
+                noResults.classList.add('hidden');
+            }
+
+            filteredBrands.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = "futuristic-card rounded-xl p-6 cursor-pointer hover:border-red-600 hover:shadow-[0_0_20px_rgba(220,38,38,0.15)] hover:-translate-y-1 transition-all duration-300 group relative overflow-hidden";
+                card.onclick = () => openModal(item);
+                
+                card.innerHTML = `
+                    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-red-600 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                    <div class="flex flex-col items-center text-center">
+                        <div class="bg-black border border-neutral-800 group-hover:border-red-600/50 p-4 rounded-xl mb-4 transition-colors relative">
+                            <i data-lucide="${item.icon}" class="w-10 h-10 text-white group-hover:text-red-500 transition-colors drop-shadow-[0_0_5px_rgba(255,255,255,0.2)] group-hover:drop-shadow-[0_0_15px_rgba(220,38,38,0.8)] relative z-10"></i>
+                        </div>
+                        <h3 class="text-xl font-black text-white mb-2 uppercase tracking-wider">${item.brand}</h3>
+                        <span class="text-xs text-neutral-500 font-mono tracking-widest group-hover:text-red-400 transition-colors flex items-center gap-1 uppercase">
+                            Prosedur <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                        </span>
+                    </div>
+                `;
+                brandsGrid.appendChild(card);
+            });
+            
+            // Re-initialize icons for newly added elements
+            lucide.createIcons();
+        }
+
+        // Render Tutorials
+        function renderTutorials() {
+            const tutorialsList = document.getElementById('tutorialsList');
+            tutorialsList.innerHTML = '';
+            
+            tutorialDatabase.forEach(tutorial => {
+                const card = document.createElement('div');
+                card.className = "futuristic-card rounded-2xl p-8 hover:border-red-600/50 transition-colors group";
+                card.innerHTML = `
+                    <div class="flex items-center gap-4 mb-6">
+                        <div class="bg-black border border-neutral-800 group-hover:border-red-900/50 p-3 rounded-lg text-white group-hover:text-red-500 transition-colors shadow-[0_0_10px_rgba(0,0,0,0.5)]">
+                            <i data-lucide="${tutorial.icon}" class="w-6 h-6"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-white uppercase tracking-wide">${tutorial.title}</h3>
+                    </div>
+                    <p class="text-neutral-400 font-mono text-sm leading-relaxed">${tutorial.content}</p>
+                `;
+                tutorialsList.appendChild(card);
+            });
+            lucide.createIcons();
+        }
+
+        // Search Event Listener
+        searchInput.addEventListener('input', (e) => {
+            renderBrands(e.target.value);
+        });
+
+        // Tab Switching Logic
+        const viewHome = document.getElementById('view-home');
+        const viewScanner = document.getElementById('view-scanner');
+        const viewTutorial = document.getElementById('view-tutorial');
+        
+        const tabHome = document.getElementById('tab-home');
+        const tabScanner = document.getElementById('tab-scanner');
+        const tabTutorial = document.getElementById('tab-tutorial');
+
+        function switchTab(tab) {
+            // Hide all views
+            viewHome.classList.add('hidden');
+            viewHome.classList.remove('block');
+            viewScanner.classList.add('hidden');
+            viewTutorial.classList.add('hidden');
+            
+            // Reset all tab styles
+            const allTabs = [tabHome, tabScanner, tabTutorial];
+            allTabs.forEach(t => {
+                t.classList.remove('text-white', 'border-red-600');
+                t.classList.add('text-neutral-500', 'border-transparent');
+            });
+
+            // Show selected view and activate tab
+            if (tab === 'home') {
+                viewHome.classList.remove('hidden');
+                viewHome.classList.add('block');
+                tabHome.classList.add('text-white', 'border-red-600');
+                tabHome.classList.remove('text-neutral-500', 'border-transparent');
+            } else if (tab === 'scanner') {
+                viewScanner.classList.remove('hidden');
+                tabScanner.classList.add('text-white', 'border-red-600');
+                tabScanner.classList.remove('text-neutral-500', 'border-transparent');
+            } else if (tab === 'tutorial') {
+                viewTutorial.classList.remove('hidden');
+                tabTutorial.classList.add('text-white', 'border-red-600');
+                tabTutorial.classList.remove('text-neutral-500', 'border-transparent');
+            }
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('procedureModal');
+        const modalCard = document.getElementById('modalCard');
+        
+        function openModal(data) {
+            // Populate Data
+            document.getElementById('modalBrandTitle').innerText = data.brand;
+            document.getElementById('modalIconContainer').innerHTML = `<i data-lucide="${data.icon}" class="text-white w-8 h-8 drop-shadow-[0_0_8px_rgba(255,255,255,0.5)]"></i>`;
+            
+            const stepsList = document.getElementById('modalStepsList');
+            stepsList.innerHTML = '';
+            data.steps.forEach((step, index) => {
+                stepsList.innerHTML += `
+                    <li class="flex gap-4 items-start bg-black/50 p-4 rounded-xl border border-neutral-800 hover:border-red-900/50 transition-colors">
+                        <div class="border border-red-600 text-red-500 bg-red-950/20 font-mono font-bold w-8 h-8 rounded-md flex items-center justify-center shrink-0 shadow-[0_0_8px_rgba(220,38,38,0.2)]">
+                            0${index + 1}
+                        </div>
+                        <p class="text-neutral-300 pt-1 leading-relaxed text-sm">${step}</p>
+                    </li>
+                `;
+            });
+
+            const notesSection = document.getElementById('modalNotes');
+            if (data.notes) {
+                notesSection.classList.remove('hidden');
+                document.getElementById('modalNotesText').innerText = data.notes;
+            } else {
+                notesSection.classList.add('hidden');
+            }
+
+            lucide.createIcons();
+
+            // Show Modal with Animation
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            // Small delay to allow display:flex to apply before animating opacity/transform
+            setTimeout(() => {
+                modalCard.classList.remove('scale-95', 'opacity-0');
+                modalCard.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            modalCard.classList.remove('scale-100', 'opacity-100');
+            modalCard.classList.add('scale-95', 'opacity-0');
+            
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300); // Wait for transition to finish
+        }
+
+        // Initial Renders
+        renderBrands();
+        renderTutorials();
+
+    </script>
+</body>
+</html>
